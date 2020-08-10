@@ -3,7 +3,7 @@ const router = express.Router();
 const Menu = require("../../models/menu");
 const Section = require('../../models/secciones')
 var mongoose = require('mongoose');
-const { remove } = require("../../models/menu");
+const { remove, schema } = require("../../models/menu");
 
 router.post("/ws/menu/:id/section/add", async (req, res) => {
     try {
@@ -41,6 +41,7 @@ router.post("/ws/menu/:id/section/add", async (req, res) => {
 router.post('/ws/section/:id/options/add', async(req, res)=>{
     try {
         var option = {
+            _id : mongoose.Schema.Types.ObjectId,
             opcion : req.body.option,
             precio : req.body.price,
             selected : false
