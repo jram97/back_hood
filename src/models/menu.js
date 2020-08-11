@@ -20,14 +20,9 @@ const MenuSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Usuario"
   },
-  tamanio: {
-    type: String,
-    enum: ['Extra', 'Pequeño', 'Mediano', 'Grande', 'Extra Grande', 'Jumbo', 'XL'],
-    default: 'Pequeño'
-  },
   secciones:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Seccion"
+    ref:"Section"
   }],
   estado: {
     type: Boolean,

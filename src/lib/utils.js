@@ -37,4 +37,12 @@ util.auth = (req, res, next) => {
     }
 };
 
+util.findDocument = async (Model,id) => {
+    try {
+        return Model.findOne({_id: id}, {_id: 1})
+    } catch (error) {
+        throw new Error(`Error db request`)
+    }
+}
+
 module.exports = util;
