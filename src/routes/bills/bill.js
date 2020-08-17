@@ -3,37 +3,58 @@ const router = express.Router();
 const Factura = require("../../models/factura");
 
 const { auth } = require("../../lib/utils");
-
+//crear una factura
 router.post("/ws/bills/new", auth, async (req, res) => {
+    
     const bill = new Factura(req.body)
-    bill.usuario = req.decoded.id;
+    await bill.save()
 
-    res.status(200).json({
-        ok: true,
-        msg: "success",
-        data: await bill.save()
-    });
+    res.send({
+        'message':'factura realizada'
+    })
+
 });
-
+//obtener todas las facturas
 router.get("/ws/bills/all", async (req, res) => {
-    const nuevaData = await Factura.find({})
-        .populate('usuario', 'nombre usuario foto correo')
-        .populate({
-        path: 'detalle',
-        populate: {
-            path: 'menu',
-            model: 'Menu',
-        },
-    });
+    const nuevaData = await Factura.find({}).populate({
+        path:'detalle.platillo',
+        select:'nombre'
+    }).populate({
+        path:'detalle.secciones.section',
+        select:'nombre'
+    })
+
+    
+    
     res.status(200).json({
         ok: true,
         msg: "success",
         data: nuevaData
     });
 });
-
+//obtener una factura
 router.get("/ws/bills/:id", async (req, res) => {
-    const nuevaData = await Factura.findOne({ _id: req.params.id }).populate('usuario').populate('empresa').populate('menu');
+
+    var populateBill = [
+        {
+            path:'usuario',
+            select:'nombre'
+        },
+        {
+            path:'empresa',
+            select:'nombre'
+        },
+        {
+            path:'detalle.platillo',
+            select:'nombre'
+        },
+        {
+            path:'detalle.secciones.section',
+            select:'nombre'
+        }
+
+    ]
+    const nuevaData = await Factura.findOne({ _id: req.params.id }).populate(populateBill)
     res.status(200).json({
         ok: true,
         msg: "success",

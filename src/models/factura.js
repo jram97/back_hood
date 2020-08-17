@@ -2,16 +2,34 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const FacturaSchema = new Schema({
-
+    empresa: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario'
+    },
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario'
     },
     detalle: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Detalle',
-        require: false
+        platillo:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Menu'
+        }],
+        secciones:[{
+            section: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Section',
+                require: false
+            }],
+            option:[{
+                type:Array,
+            }]
+        }],
     }],
+    cantidad:{
+        type:Number,
+        default:0,
+    },
     total: {
         type: Number,
         default: 0
@@ -21,10 +39,6 @@ const FacturaSchema = new Schema({
         enum: ['Pendiente', 'Cancelado', 'Rechazado'],
         default: 'Pendiente'
     },
-    status: {
-        type: Boolean,
-        default: true
-    }
     
 }, { timestamps: true });
 
